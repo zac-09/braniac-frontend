@@ -1,0 +1,19 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;500;600;700;800;900&display=swap");
+
+.button {
+  padding: 10px 20px;
+  border-radius: 8px;
+  color: #049b8c;
+  background-color: #efefef;
+  text-decoration: none;
+  font-family: "Nunito";
+  font-size: 18px;
+  line-height: 34px;
+  border: none;
+  transition: all 0.3s ease;
+}
+.button:hover {
+  color: #efefef;
+  outline: 2px solid #efefef;
+  background-color: #049b8c;
+}

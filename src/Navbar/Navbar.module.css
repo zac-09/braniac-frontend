@@ -1,0 +1,25 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;500;600;700;800;900&display=swap");
+
+.navbar {
+  height: 70px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 100px 0 100px;
+  font-family: "Nunito";
+}
+.logo {
+  height: 40px;
+  width: 40px;
+}
+
+.link {
+  padding: 0 30px;
+  text-decoration: none;
+  color: #f3f3f3;
+  transition: all 0.3s ease;
+}
+
+.link:hover {
+  color: #f3f3f36c;
+}

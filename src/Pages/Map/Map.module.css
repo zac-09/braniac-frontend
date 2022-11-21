@@ -1,0 +1,150 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+
+.map_container {
+  display: flex;
+}
+.map_content {
+  height: max-content;
+  width: 200px;
+  background-color: #049b8c16;
+  padding: 10px;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.map_content h4 {
+  font-family: poppins;
+  font-size: 20px;
+  margin: 0 0 5px 0;
+}
+input[type="checkbox"] {
+  -webkit-appearance: none;
+  height: 20px;
+  width: 20px;
+  cursor: pointer;
+  position: relative;
+  border: 2px solid #049b8c;
+  border-radius: 3px;
+}
+input[type="checkbox"]:checked {
+  background-color: #049b8c;
+  border: none;
+}
+input[type="checkbox"]:before,
+input[type="checkbox"]:checked:before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  color: #fff;
+}
+input[type="checkbox"]:checked:before {
+  content: "✔";
+}
+.checkboxes {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 5px;
+}
+label {
+  font-family: "poppins";
+  font-size: 15px;
+}
+.map {
+  height: 70vh;
+  width: 80%;
+  margin: 20px;
+}
+.background {
+  background-color: #049b8c;
+}
+.button {
+  text-transform: uppercase;
+  font-family: "poppins";
+  background-color: #049b8c;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 5px;
+  /* width: 80px; */
+  cursor: pointer;
+  transition: all 0.3s ease 0s;
+  margin: 10px;
+}
+.button:hover {
+  background-color: #049b8c8a;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 13px;
+  cursor: pointer;
+}
+.keys {
+  height: 150px;
+  width: 80%;
+  background-color: #049b8c16;
+  margin: 0 20px;
+  display: flex;
+  gap: 50px;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.h4 {
+  margin: 0 0 0 20px;
+  font-family: poppins;
+  color: rgba(0, 0, 0, 0.614);
+}
+
+h5 {
+  margin: 0;
+  font-family: poppins;
+}
+.entry {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  margin: 5px;
+}
+.entry p {
+  margin: 0;
+  font-family: poppins;
+  font-size: 15px;
+}
+.color {
+  height: 15px;
+  width: 15px;
+  border-radius: 3px;
+  border: 2px solid #dc0101;
+}
+#ward {
+  border: 2px solid #049b8c;
+}
+#industrial {
+  border: none;
+  background-color: #dc0101;
+}
+#agricultural {
+  border: none;
+  background-color: #049b8c;
+}
+#waterbodies {
+  border: none;
+  background-color: #35c2ff;
+}
+#sewarage {
+  border: none;
+  background-color: #dcac01;
+}
+#FMS {
+  border: none;
+  background-color: #951a88;
+}
+#dewats {
+  border: none;
+  background-color: #ff7e35;
+}
