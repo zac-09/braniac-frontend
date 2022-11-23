@@ -1,16 +1,18 @@
 import { useEffect, useMemo, useState } from "react";
+import CircularProgress from "@mui/joy/CircularProgress";
 import {
   GoogleMap,
   useLoadScript,
   Marker,
   Polyline,
+  Polygon
 } from "@react-google-maps/api";
 import { Autocomplete } from "@react-google-maps/api";
 import classes from "./Map.module.css";
 import Navbar from "../../Navbar/Navbar";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchGeoJson } from "../../store/actions/geoActions";
-
+const libraries = ["places"];
 var options = {
   enableHighAccuracy: true,
   timeout: 5000,
@@ -36,31 +38,29 @@ function errors(err) {
 const MapPage = () => {
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: "AIzaSyBAoWCRMl3HHiRUmetjQgyl6wFZZizNioY",
-    libraries: ["places"],
+    libraries,
   });
   const geoData = useSelector((state) => state.geo.geojson);
   const dispatch = useDispatch();
   const [userlat, setUserLat] = useState(41.28);
   const [userlon, setUserLon] = useState(0.1956);
+  const [testState, setTestState] = useState("zac");
   const [autocomplete, setAutocomplete] = useState(null);
-  console.log("the geo data from state:", geoData);
+
   function success(pos) {
     var crd = pos.coords;
     setUserLat(crd.latitude);
     setUserLon(crd.longitude);
-    console.log("Your current position is:");
-    console.log(`Latitude : ${crd.latitude}`);
-    console.log(`Longitude: ${crd.longitude}`);
-    console.log(`More or less ${crd.accuracy} meters.`);
   }
   useEffect(() => {
-    console.log("API KEY:", "AIzaSyBAoWCRMl3HHiRUmetjQgyl6wFZZizNioY");
+    setTestState("new name");
+    console.log("component rendered");
     if (navigator.geolocation) {
       navigator.permissions
         .query({ name: "geolocation" })
         .then(function (result) {
           if (result.state === "granted") {
-            console.log(result.state);
+            // console.log(result.state);
             //If granted then you can directly call your function here
             navigator.geolocation.getCurrentPosition(success);
           } else if (result.state === "prompt") {
@@ -69,59 +69,49 @@ const MapPage = () => {
             //If denied then you have to show instructions to enable location
           }
           result.onchange = function () {
-            console.log(result.state);
+            // console.log(result.state);
           };
         });
     } else {
       alert("Sorry Not available!");
     }
   }, []);
-  if (!isLoaded) return <div>loading....</div>;
-  return (
-    <Map
-      userlat={userlat}
-      userlon={userlon}
-      autocomplete={autocomplete}
-      dispatch={dispatch}
-      setAutocomplete={setAutocomplete}
-      setUserLat={setUserLat}
-      setUserLon={setUserLon}
-      geo={geoData}
-    />
-  );
-};
+  if (!isLoaded)
+    return (
+      <div style={{ display: "flex", justifyContent: "center",alignItems:"center" }}>
+        <CircularProgress variant="soft" />
+      </div>
+    );
 
-function Map(props) {
-  const center = useMemo(
-    () => ({ lat: props.userlat, lng: props.userlon }),
-    [props.userlat, props.userlon]
-  );
+  const center = { lat: userlat, lng: userlon };
+
   const onLoad = (autocomplete) => {
-    console.log("autocomplete: ", autocomplete);
+    // console.log("autocomplete: ", autocomplete);
 
-    props.setAutocomplete(autocomplete);
+    setAutocomplete(autocomplete);
   };
 
   const onPlaceChanged = () => {
-    if (props.autocomplete !== null) {
-      const placeData = props.autocomplete.getPlace();
-
-      props.setUserLat(placeData.geometry.location.lat);
-      props.setUserLon(placeData.geometry.location.lon);
-      props.dispatch(fetchGeoJson(placeData.name));
-
-      console.log(props.autocomplete.getPlace());
+    if (autocomplete !== null) {
+      const placeData = autocomplete.getPlace();
+      console.log("reached here", placeData);
+      setUserLat(placeData.geometry.location.lat());
+      setUserLon(placeData.geometry.location.lng());
+      // dispatch(fetchGeoJson(placeData.name));
+      // setAutocomplete(null);
+      // console.log(autocomplete.getPlace());
     } else {
       console.log("Autocomplete is not loaded yet!");
     }
   };
+
   return (
     <>
       <Navbar background={classes.background} />
       <div className={classes.map_container}>
         <GoogleMap
           zoom={10}
-          center={{ lat: props.userlat, lng: props.userlon }}
+          center={{ lat: userlat, lng: userlon }}
           mapContainerClassName={classes.map}
         >
           <Autocomplete onLoad={onLoad} onPlaceChanged={onPlaceChanged}>
@@ -145,17 +135,18 @@ function Map(props) {
               }}
             />
           </Autocomplete>
-          {props.geo.type && (
+          {/* {geoData.type && (
             <Polyline
               onLoad={() => {}}
-              path={props.geo.coordinates}
+              path={geoData.coordinates}
               options={polyOptions}
             />
-          )}
+          )} */}
           <Marker
-            position={{ lat: props.userlat, lng: props.userlon }}
+            position={{ lat: userlat, lng: userlon }}
             zIndex={1}
             visible={true}
+            onLoad={()=>{}}
           />
         </GoogleMap>
         <div className={classes.map_content}>
@@ -235,6 +226,6 @@ function Map(props) {
       </div>
     </>
   );
-}
+};
 
 export default MapPage;

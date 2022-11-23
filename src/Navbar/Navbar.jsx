@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import logo from "../Images/Union.png";
+import logo from "../Images/logo-2.png";
 import classes from "./Navbar.module.css";
 import Button from "../Button/Button";
 
