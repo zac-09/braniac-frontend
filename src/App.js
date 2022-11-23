@@ -5,6 +5,7 @@ import AboutUs from "./Pages/About Us/AboutUs";
 import MapPage from "./Pages/Map/Map";
 import WhyUs from "./Pages/Why Us/WhyUs";
 import HowToUse from "./Pages/How To Use/HowToUse";
+import Login from "./Pages/Login";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/whyUs" element={<WhyUs />} />
         <Route path="/howToUse" element={<HowToUse />} />
         <Route path="/map" element={<MapPage />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
     </BrowserRouter>
   );
