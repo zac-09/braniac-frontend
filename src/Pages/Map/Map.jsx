@@ -5,7 +5,8 @@ import {
   useLoadScript,
   Marker,
   Polyline,
-  Polygon
+  Polygon,
+  Circle,
 } from "@react-google-maps/api";
 import { Autocomplete } from "@react-google-maps/api";
 import classes from "./Map.module.css";
@@ -18,20 +19,47 @@ var options = {
   timeout: 5000,
   maximumAge: 0,
 };
-const polyOptions = {
-  strokeColor: "#1B4D3E",
+const circleOptions = {
+  strokeColor: "#FF0000",
   strokeOpacity: 0.8,
   strokeWeight: 2,
-  fillColor: "#1B4D3E",
+  fillColor: "#FF0000",
   fillOpacity: 0.35,
   clickable: false,
   draggable: false,
   editable: false,
   visible: true,
   radius: 30000,
-
   zIndex: 1,
 };
+const circleCenter = {
+  lat: -3.745,
+  lng: -38.523,
+};
+const onUnmount = (circle) => {
+  console.log("Circle onUnmount circle: ", circle);
+};
+const paths = [
+  { lat: 25.774, lng: -80.19 },
+  { lat: 18.466, lng: -66.118 },
+  { lat: 32.321, lng: -64.757 },
+  { lat: 25.774, lng: -80.19 },
+];
+const onPolyLoad = (polygon) => {
+  console.log("polygon: ", polygon);
+};
+const polygonOptions = {
+  strokeColor: "#fc1e0d",
+  strokeOpacity: 1,
+  strokeWeight: 2,
+  clickable: false,
+  draggable: false,
+  editable: false,
+  geodesic: false,
+  zIndex: 1,
+  icons: [{ icon: "hello", offset: 0, repeat: "10px" }],
+};
+
 function errors(err) {
   console.warn(`ERROR(${err.code}): ${err.message}`);
 }
@@ -46,7 +74,7 @@ const MapPage = () => {
   const [userlon, setUserLon] = useState(0.1956);
   const [testState, setTestState] = useState("zac");
   const [autocomplete, setAutocomplete] = useState(null);
-
+  console.log("the geodata:", geoData);
   function success(pos) {
     var crd = pos.coords;
     setUserLat(crd.latitude);
@@ -78,12 +106,18 @@ const MapPage = () => {
   }, []);
   if (!isLoaded)
     return (
-      <div style={{ display: "flex", justifyContent: "center",alignItems:"center" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         <CircularProgress variant="soft" />
       </div>
     );
 
-  const center = { lat: userlat, lng: userlon };
+  const center = { lat: 24.886, lng: -70.268 };
 
   const onLoad = (autocomplete) => {
     // console.log("autocomplete: ", autocomplete);
@@ -97,7 +131,7 @@ const MapPage = () => {
       console.log("reached here", placeData);
       setUserLat(placeData.geometry.location.lat());
       setUserLon(placeData.geometry.location.lng());
-      // dispatch(fetchGeoJson(placeData.name));
+      dispatch(fetchGeoJson(placeData.name));
       // setAutocomplete(null);
       // console.log(autocomplete.getPlace());
     } else {
@@ -135,20 +169,37 @@ const MapPage = () => {
               }}
             />
           </Autocomplete>
-          {/* {geoData.type && (
-            <Polyline
-              onLoad={() => {}}
-              path={geoData.coordinates}
-              options={polyOptions}
-            />
-          )} */}
+          <Polygon
+            onLoad={onPolyLoad}
+            paths={geoData}
+            options={polygonOptions}
+          />
           <Marker
             position={{ lat: userlat, lng: userlon }}
             zIndex={1}
             visible={true}
-            onLoad={()=>{}}
+            onLoad={() => {}}
           />
         </GoogleMap>
+        {/* <GoogleMap
+          id="marker-example"
+          mapContainerClassName={classes.map}
+          zoom={5}
+          center={circleCenter}
+        >
+          <Polygon onLoad={onPolyLoad} paths={paths} options={polygonOptions} />
+          <Circle
+            // optional
+            // onLoad={onLoad}
+            // optional
+            onUnmount={onUnmount}
+            // required
+            center={circleCenter}
+            // required
+            options={circleOptions}
+            radius={30000}
+          />
+        </GoogleMap> */}
         <div className={classes.map_content}>
           <h4>contents</h4>
           <div className={classes.checkboxes}>
@@ -179,7 +230,7 @@ const MapPage = () => {
         </div>
       </div>
 
-      <h4 className={classes.h4}>Key</h4>
+      {/* <h4 className={classes.h4}>Key</h4>
       <div className={classes.keys}>
         <div>
           <h5>Boundary</h5>
@@ -223,7 +274,7 @@ const MapPage = () => {
             <p>DEWATS</p>
           </div>
         </div>
-      </div>
+      </div> */}
     </>
   );
 };

@@ -10,7 +10,14 @@ export const fetchGeoJson = (location) => {
       console.log("An error occured while fetching poylgon ");
     }
     const res = await response.json();
-    dispatch(getGeoJson({ geojson: res[0].geojson }));
-    console.log("res data from api:", res);
+    let coordinates = res[0].geojson.coordinates[0][0];
+    const crdArr = [];
+    coordinates.map((coordinate) =>
+      crdArr.push({ lat: coordinate[1], lng: coordinate[0] })
+    );
+    console.log("res data from api:", res[0].geojson);
+    console.log("res data after process:", crdArr);
+    dispatch(getGeoJson({geojson:crdArr}));
+
   };
 };
