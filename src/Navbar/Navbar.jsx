@@ -21,8 +21,11 @@ const Navbar = ({ background }) => {
         <a className={classes.link} href="#howtoUse">
           How To Use
         </a>
+        <Link to="/userreport" className={classes.link}>
+          Make Report
+        </Link>
       </div>
-      <Button />
+      {/* <Button /> */}
     </nav>
   );
 };
