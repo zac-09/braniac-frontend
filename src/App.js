@@ -7,6 +7,7 @@ import WhyUs from "./Pages/Why Us/WhyUs";
 import HowToUse from "./Pages/How To Use/HowToUse";
 import UserReport from "./Pages/User Report/UserReport";
 import Login from "./Pages/Login";
+import AllReport from "./Pages/AllReport";
 
 function App() {
   return (
@@ -19,7 +20,7 @@ function App() {
         <Route path="/map" element={<MapPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/userreport" element={<UserReport />} />
-        
+        <Route path="/all-report" element={<AllReport />} />
       </Routes>
     </BrowserRouter>
   );

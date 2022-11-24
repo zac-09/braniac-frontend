@@ -8,6 +8,7 @@ import {
   Polygon,
   Circle,
 } from "@react-google-maps/api";
+import turf from "@turf/boolean-point-in-polygon";
 import { Autocomplete } from "@react-google-maps/api";
 import classes from "./Map.module.css";
 import Navbar from "../../Navbar/Navbar";
@@ -74,7 +75,68 @@ const MapPage = () => {
   const [userlon, setUserLon] = useState(0.1956);
   const [testState, setTestState] = useState("zac");
   const [autocomplete, setAutocomplete] = useState(null);
-  console.log("the geodata:", geoData);
+  const [polygon, setPolygon] = useState([])
+
+  useEffect(() => {
+    console.log(geoData)
+    let list = []
+    if(geoData.type === 'Polygon'){
+      geoData.coordinates[0].forEach((item) => {
+        list.push({lat: item[1].toFixed(3), lng: item[0].toFixed(3)})
+      })
+    }
+    console.log(list)
+    setPolygon(list)
+  }, [geoData])
+  
+  
+  // Get bounds from geojson
+  const bounds = useMemo(() => {
+    if (geoData.type !== "Point" && geoData.coordinates) {
+      console.log(geoData.coordinates);
+      let bounds = []
+      if(geoData.coordinates[0]){
+        bounds = new window.google.maps.LatLngBounds();
+        geoData.coordinates.forEach((feature) => {
+          console.log(feature);
+          feature.forEach((coord) => {
+            bounds.extend(new window.google.maps.LatLng(coord[1], coord[0]));
+          });
+        });
+      }else{
+        bounds.forEach((coord) => {
+          bounds.extend(new window.google.maps.LatLng(coord[1], coord[0]));
+        });
+      }
+      console.log(bounds);
+      return bounds;
+    }
+  }, [geoData.coordinates]);
+
+  // const getRandomCoords = () => {
+  //   if(geoData.coordinates[0]){
+  //     var x_max = bounds.getEast();
+  //     var x_min = bounds.getWest();
+  //     var y_max = bounds.getSouth();
+  //     var y_min = bounds.getNorth();
+  //     var x = Math.random() * (x_max - x_min) + x_min;
+  //     var y = Math.random() * (y_max - y_min) + y_min;
+  //     var point  = turf.point([x, y]);
+  //     var poly   = geoData.coordinates
+  //     var inside = turf.inside(point, poly);
+
+  //     if (inside) {
+  //         return point
+  //     } else {
+  //         return getRandomCoords()
+  //     }
+  //   }
+  // }
+
+  // useEffect(() => {
+  //   const point = getRandomCoords()
+
+  // }, [bounds])
   function success(pos) {
     var crd = pos.coords;
     setUserLat(crd.latitude);
@@ -104,6 +166,7 @@ const MapPage = () => {
       alert("Sorry Not available!");
     }
   }, []);
+
   if (!isLoaded)
     return (
       <div
@@ -124,20 +187,33 @@ const MapPage = () => {
 
     setAutocomplete(autocomplete);
   };
-
   const onPlaceChanged = () => {
     if (autocomplete !== null) {
       const placeData = autocomplete.getPlace();
       console.log("reached here", placeData);
       setUserLat(placeData.geometry.location.lat());
       setUserLon(placeData.geometry.location.lng());
+      setAutocomplete(null);
       dispatch(fetchGeoJson(placeData.name));
-      // setAutocomplete(null);
-      // console.log(autocomplete.getPlace());
+      console.log(autocomplete.getPlace());
     } else {
       console.log("Autocomplete is not loaded yet!");
     }
   };
+  if (!isLoaded)
+    return (
+      <div style={{ display: "flex", justifyContent: "center",alignItems:"center" }}>
+        <CircularProgress variant="soft" />
+      </div>
+    );
+
+  // const center = { lat: userlat, lng: userlon };
+
+  // const onLoad = (autocomplete) => {
+  //   // console.log("autocomplete: ", autocomplete);
+
+  //   setAutocomplete(autocomplete);
+  // };
 
   return (
     <>
@@ -148,7 +224,7 @@ const MapPage = () => {
           center={{ lat: userlat, lng: userlon }}
           mapContainerClassName={classes.map}
         >
-          <Autocomplete onLoad={onLoad} onPlaceChanged={onPlaceChanged}>
+          <Autocomplete onLoad={(autocomplete) => setAutocomplete(autocomplete)} onPlaceChanged={() => onPlaceChanged()}>
             <input
               type="text"
               placeholder="Customized your placeholder"
