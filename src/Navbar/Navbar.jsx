@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import logo from "../Images/logo.png";
 import classes from "./Navbar.module.css";
-import Button from "../Button/Button";
 
 const Navbar = ({ background }) => {
   return (
@@ -11,6 +10,9 @@ const Navbar = ({ background }) => {
       <div className={classes.nav_links}>
         <Link to="/" className={classes.link}>
           Home
+        </Link>
+        <Link to="/all-report" className={classes.link}>
+          Reports
         </Link>
         <Link to="/aboutUs" className={classes.link}>
           About us
@@ -21,8 +23,11 @@ const Navbar = ({ background }) => {
         <a className={classes.link} href="#howtoUse">
           How To Use
         </a>
+        <Link to="/userreport" className={classes.link}>
+          Make Report
+        </Link>
       </div>
-      <Button />
+      {/* <Button /> */}
     </nav>
   );
 };

@@ -1,0 +1,131 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;500;600;700;800;900&display=swap");
+
+.container{
+    display: flex;
+	flex-direction: column;
+	flex-wrap: nowrap;
+	justify-content: space-around;
+	align-items: center;
+	align-content: center;
+    width: 100%;
+    height: max-content;
+
+}
+.background {
+    background-color: #049b8c;
+  }
+  .row{
+    display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: start;
+	align-items: center;
+	align-content: center;
+
+  }
+  .input{
+  display: inline-block;
+  background: linear-gradient(top, #f9f9f9, #e3e3e3);
+  border: 0.5px solid #049b8c52;
+  border-radius: 3px;
+  padding: 5px 8px;
+  outline: none;
+  cursor: pointer;
+  text-shadow: 1px 1px #fff;
+  font-weight: 700;
+  font-size: 10pt;
+  margin: 20px;
+  }
+  .input:hover {
+    border-color: #049b8c;
+  }
+.input1{
+  display: inline-block;
+  background: linear-gradient(top, #f9f9f9, #e3e3e3);
+  border: 0.5px solid #049b8c52;
+  border-radius: 3px;
+  padding: 5px 8px;
+  outline: none;
+  cursor: pointer;
+  text-shadow: 1px 1px #fff;
+  font-weight: 700;
+  font-size: 10pt;
+  margin: 20px;
+  width: 450px;
+  }
+  .input1:hover {
+    border-color: #049b8c;
+  }
+.input2{
+display: inline-block;
+background: linear-gradient(top, #f9f9f9, #e3e3e3);
+border: 0.5px solid #049b8c52;
+border-radius: 3px;
+padding: 5px 8px;
+outline: none;
+cursor: pointer;
+text-shadow: 1px 1px #fff;
+font-weight: 700;
+font-size: 10pt;
+margin: 20px;
+width: 112px;
+}
+.input2:hover {
+border-color: #049b8c;
+}
+
+.input3{
+display: inline-block;
+background: linear-gradient(top, #f9f9f9, #e3e3e3);
+border: 0.5px solid #049b8c52;
+border-radius: 3px;
+padding: 5px 8px;
+outline: none;
+cursor: pointer;
+text-shadow: 1px 1px #fff;
+font-weight: 700;
+font-size: 10pt;
+margin: 20px;
+width:390px;
+}
+.input3:hover {
+border-color: #049b8c;
+}
+.file{
+display: inline-block;
+background: linear-gradient(top, #f9f9f9, #e3e3e3);
+border: 0.5px solid #049b8c52;
+border-radius: 3px;
+padding: 5px 8px;
+outline: none;
+cursor: pointer;
+text-shadow: 1px 1px #fff;
+font-weight: 700;
+font-size: 10pt;
+margin: 20px;
+width:370px;
+}
+.file:hover {
+border-color: #049b8c;
+}
+.button {
+padding: 5px 20px;
+margin: 20px;
+border-radius: 8px;
+color: #ffffff;
+background-color: #049b8c;
+text-decoration: none;
+font-family: "Nunito";
+font-size: 18px;
+line-height: 34px;
+border: none;
+transition: all 0.3s ease;
+}
+.h3 {
+color: #049b8c;
+text-transform: uppercase;
+font-family: "Nunito";
+font-size: 36px;
+padding: 0;
+margin-bottom: 50px;
+}
