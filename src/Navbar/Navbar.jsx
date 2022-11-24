@@ -15,14 +15,14 @@ const Navbar = ({ background }) => {
         <Link to="/aboutUs" className={classes.link}>
           About us
         </Link>
-        <a className={classes.link} href="#whyUs">
-          Why Us
-        </a>
-        <a className={classes.link} href="#howtoUse">
+        <Link to="/whyUs" className={classes.link}>
+          Why us
+        </Link>
+        <Link to="/howToUse" className={classes.link}>
           How To Use
-        </a>
+        </Link>
       </div>
-      <Button />
+      {/* <Button /> */}
     </nav>
   );
 };
