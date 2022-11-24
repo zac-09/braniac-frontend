@@ -7,8 +7,7 @@ import Footer from "../../Footer/Footer";
 const HowToUse = () => {
   return (
     <>
-      <Navbar background={classes.background} />
-      <section className={classes.whyUs}>
+      <section className={classes.whyUs} id="howtoUse">
         <h3 className={classes.h3}>HOW TO USE</h3>
         <div className={classes.container}>
           <div className={classes.sub_container}>
@@ -91,7 +90,6 @@ const HowToUse = () => {
           </div>
         </div>
       </section>
-      <Footer />
     </>
   );
 };
