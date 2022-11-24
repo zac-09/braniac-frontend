@@ -7,6 +7,7 @@ import Navbar from "../../Navbar/Navbar";
 const WhyUs = () => {
   return (
     <>
+      <Navbar background={classes.background} />
       <section className={classes.whyUs} id="whyUs">
         <h3 className={classes.h3}>Why Us</h3>
         <div className={classes.container}>

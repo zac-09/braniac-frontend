@@ -17,12 +17,15 @@ const Navbar = ({ background }) => {
         <Link to="/aboutUs" className={classes.link}>
           About us
         </Link>
-        <a className={classes.link} href="#whyUs">
+        <Link className={classes.link} to="/whyUs">
           Why Us
-        </a>
-        <a className={classes.link} href="#howtoUse">
+        </Link>
+        <Link className={classes.link} to="/howtoUse">
           How To Use
-        </a>
+        </Link>
+        <Link className={classes.link} to="/ground-water">
+          Ground Water Quality
+        </Link>
         <Link to="/userreport" className={classes.link}>
           Make Report
         </Link>

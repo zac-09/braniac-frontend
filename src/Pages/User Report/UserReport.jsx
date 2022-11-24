@@ -19,6 +19,8 @@ const UserReport = () => {
     zip: "",
     description: "",
     image: null,
+    latitude: "18.076090",
+    longitude: "70.877426",
   })
   const [loading, setLoading] = useState(false)
   const submitHandler = () => {
@@ -49,13 +51,17 @@ const UserReport = () => {
         setLoading(false)
       });
   }
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition((position) => {
+      setData({...data, latitude: position.coords.latitude, longitude: position.coords.longitude})
+    });
+  }, [])
+  
   return (
     <>
       <Navbar background={classes.background} />
-      
       <section id="userreport"> 
-        <div className={classes.container}>
-          
+      <div className={classes.container}>
       <h3 className={classes.h3}>PROBLEM REPORT</h3>
         <div>
           <div className={classes.row}>
@@ -71,8 +77,10 @@ const UserReport = () => {
                 <div className={`${!drop && 'hidden'} bg-white text-base z-50 list-none divide-y divide-gray-100 rounded shadow my-4 absolute`} id="dropdown">
                     <ul className="py-1" aria-labelledby="dropdown">
                       <li onClick={() => setData(prev => ({...prev, type: 'Sewage'}))} className="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2">Sewage</li>
-                      <li onClick={() => setData(prev => ({...prev, type: 'FSM'}))} className="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2">FSM</li>
-                      <li onClick={() => setData(prev => ({...prev, type: 'DEWAT'}))} className="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2">DEWAT</li>
+                      <li onClick={() => setData(prev => ({...prev, type: 'Drinking water'}))} className="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2">Drinking water</li>
+                      <li onClick={() => setData(prev => ({...prev, type: 'Ground Water'}))} className="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2">Ground Water</li>
+                      <li onClick={() => setData(prev => ({...prev, type: 'Water Contamination'}))} className="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2">Water Contamination</li>
+                      <li onClick={() => setData(prev => ({...prev, type: 'Drainage System'}))} className="text-sm hover:bg-gray-100 text-gray-700 block px-4 py-2">Drainage System</li>
                     </ul>
                 </div>
               </div>

@@ -8,6 +8,8 @@ import HowToUse from "./Pages/How To Use/HowToUse";
 import UserReport from "./Pages/User Report/UserReport";
 import Login from "./Pages/Login";
 import AllReport from "./Pages/AllReport";
+import SingleMap from "./Pages/SingleMap";
+import GWQ from "./Pages/GWQ";
 
 function App() {
   return (
@@ -21,6 +23,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/userreport" element={<UserReport />} />
         <Route path="/all-report" element={<AllReport />} />
+        <Route path="/map/:index" element={<SingleMap />} />
+        <Route path="/ground-water" element={<GWQ />} />
       </Routes>
     </BrowserRouter>
   );
