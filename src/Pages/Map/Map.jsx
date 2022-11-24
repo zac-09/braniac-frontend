@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
+import moment from "moment";
 import CircularProgress from "@mui/joy/CircularProgress";
 import {
   GoogleMap,
   useLoadScript,
   Marker,
-  Polyline,
+  InfoWindow,
   Polygon,
   Circle,
 } from "@react-google-maps/api";
@@ -12,12 +13,24 @@ import { Autocomplete } from "@react-google-maps/api";
 import classes from "./Map.module.css";
 import Navbar from "../../Navbar/Navbar";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchGeoJson } from "../../store/actions/geoActions";
+import { fetchAllReports, fetchGeoJson } from "../../store/actions/geoActions";
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
+import Card from "@mui/joy/Card";
+import CardContent from "@mui/joy/CardContent";
+import CardOverflow from "@mui/joy/CardOverflow";
+import Divider from "@mui/joy/Divider";
+import Typography from "@mui/joy/Typography";
+import AspectRatio from '@mui/joy/AspectRatio';
 const libraries = ["places"];
 var options = {
   enableHighAccuracy: true,
   timeout: 5000,
   maximumAge: 0,
+};
+const position = { lat: 33.772, lng: -117.214 };
+const infoCenter = {
+  lat: 38.685,
+  lng: -115.234,
 };
 const circleOptions = {
   strokeColor: "#FF0000",
@@ -69,12 +82,16 @@ const MapPage = () => {
     libraries,
   });
   const geoData = useSelector((state) => state.geo.geojson);
+  const infoData = useSelector((state) => state.geo.infoPoints);
+  const isLoading = useSelector((state) => state.geo.isLoading);
   const dispatch = useDispatch();
   const [userlat, setUserLat] = useState(41.28);
   const [userlon, setUserLon] = useState(0.1956);
   const [testState, setTestState] = useState("zac");
   const [autocomplete, setAutocomplete] = useState(null);
+  // const [isLoading, setIsLoading] = useState(false);
   console.log("the geodata:", geoData);
+  console.log("the infodata:", infoData);
   function success(pos) {
     var crd = pos.coords;
     setUserLat(crd.latitude);
@@ -138,49 +155,163 @@ const MapPage = () => {
       console.log("Autocomplete is not loaded yet!");
     }
   };
+  const fetchDataHandler = async () => {
+    try {
+      // setIsLoading(true);
+      dispatch(fetchAllReports(userlat,userlon));
+      // setIsLoading(false);
+    } catch (e) {
+      // setIsLoading(false);
+    }
+  };
 
   return (
     <>
       <Navbar background={classes.background} />
       <div className={classes.map_container}>
-        <GoogleMap
-          zoom={10}
-          center={{ lat: userlat, lng: userlon }}
-          mapContainerClassName={classes.map}
-        >
-          <Autocomplete onLoad={onLoad} onPlaceChanged={onPlaceChanged}>
-            <input
-              type="text"
-              placeholder="Customized your placeholder"
-              style={{
-                boxSizing: `border-box`,
-                border: `1px solid transparent`,
-                width: `240px`,
-                height: `32px`,
-                padding: `0 12px`,
-                borderRadius: `3px`,
-                boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
-                fontSize: `14px`,
-                outline: `none`,
-                textOverflow: `ellipses`,
-                position: "absolute",
-                left: "50%",
-                marginLeft: "-120px",
-              }}
-            />
-          </Autocomplete>
-          <Polygon
+        {infoData.length > 1 ? (
+          <GoogleMap
+            zoom={10}
+            center={{ lat: userlat, lng: userlon }}
+            mapContainerClassName={classes.map}
+            id="our map"
+          >
+            <Autocomplete onLoad={onLoad} onPlaceChanged={onPlaceChanged}>
+              <input
+                type="text"
+                placeholder="Customized your placeholder"
+                style={{
+                  boxSizing: `border-box`,
+                  border: `1px solid transparent`,
+                  width: `240px`,
+                  height: `32px`,
+                  padding: `0 12px`,
+                  borderRadius: `3px`,
+                  boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
+                  fontSize: `14px`,
+                  outline: `none`,
+                  textOverflow: `ellipses`,
+                  position: "absolute",
+                  left: "50%",
+                  marginLeft: "-120px",
+                }}
+              />
+            </Autocomplete>
+            {/* <Polygon
             onLoad={onPolyLoad}
             paths={geoData}
             options={polygonOptions}
-          />
-          <Marker
+          /> */}
+            {infoData.map((info) => (
+              <InfoWindow
+                onLoad={(onLoad) => {}}
+                position={{ lat: info.latitude, lng: info.longitude }}
+              >
+                {/* <div
+                style={{
+                  background: `white`,
+                  border: `1px solid #ccc`,
+                  padding: 15,
+                }}
+              >
+                <h3>Name</h3>: <p>{info.name}</p>
+                <h3>Type</h3>: <p>{info.type}</p>
+                <h3>Description</h3>: <p>{info.description}</p>
+                <h3>updatedAt</h3>: <p>{moment(info.updatedAt).format('MMMM Do YYYY, h:mm:ss a') }</p>
+              </div> */}
+                <Card
+                  row
+                  variant="outlined"
+                  sx={{ width: 260, bgcolor: "background.body" }}
+                >
+                  <CardOverflow>
+                    <AspectRatio ratio="1" sx={{ width: 90 }}>
+                      <img
+                        src={`https://uia-backend.onrender.com/${info.imageURL}`}
+                        loading="lazy"
+                        alt=""
+                      />
+                    </AspectRatio>
+                  </CardOverflow>
+                  <CardContent sx={{ px: 2 }}>
+                    <Typography
+                      fontWeight="md"
+                      textColor="success.plainColor"
+                      mb={0.5}
+                    >
+                      {info.name}
+                    </Typography>
+                    <Typography level="body2">{info.description}</Typography>
+                  </CardContent>
+                  <Divider />
+                  <CardOverflow
+                    variant="soft"
+                    color="primary"
+                    sx={{
+                      px: 0.2,
+                      writingMode: "vertical-rl",
+                      textAlign: "center",
+                      fontSize: "xs2",
+                      fontWeight: "xl2",
+                      letterSpacing: "1px",
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    {info.type}
+                  </CardOverflow>
+                </Card>
+              </InfoWindow>
+            ))}
+
+            {/* <Marker
             position={{ lat: userlat, lng: userlon }}
             zIndex={1}
             visible={true}
             onLoad={() => {}}
-          />
-        </GoogleMap>
+          /> */}
+          </GoogleMap>
+        ) : (
+          <GoogleMap
+            zoom={10}
+            center={{ lat: userlat, lng: userlon }}
+            mapContainerClassName={classes.map}
+            id="our map"
+          >
+            <Autocomplete onLoad={onLoad} onPlaceChanged={onPlaceChanged}>
+              <input
+                type="text"
+                placeholder="Customized your placeholder"
+                style={{
+                  boxSizing: `border-box`,
+                  border: `1px solid transparent`,
+                  width: `240px`,
+                  height: `32px`,
+                  padding: `0 12px`,
+                  borderRadius: `3px`,
+                  boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
+                  fontSize: `14px`,
+                  outline: `none`,
+                  textOverflow: `ellipses`,
+                  position: "absolute",
+                  left: "50%",
+                  marginLeft: "-120px",
+                }}
+              />
+            </Autocomplete>
+            {/* <Polygon
+            onLoad={onPolyLoad}
+            paths={geoData}
+            options={polygonOptions}
+          /> */}
+
+            {/* <Marker
+            position={{ lat: userlat, lng: userlon }}
+            zIndex={1}
+            visible={true}
+            onLoad={() => {}}
+          /> */}
+          </GoogleMap>
+        )}
         {/* <GoogleMap
           id="marker-example"
           mapContainerClassName={classes.map}
@@ -226,7 +357,13 @@ const MapPage = () => {
             <input type="checkbox" name="sanitation inversion" />
             <label for="sanitation inversion">Sanitation Inversion</label>
           </div>
-          <button className={classes.button}>Key info</button>
+          {isLoading ? (
+           <div style={{marginLeft:"35px"}}> <LoadingSpinner /> </div>
+          ) : (
+            <button className={classes.button} onClick={fetchDataHandler}>
+              load Data
+            </button>
+          )}
         </div>
       </div>
 

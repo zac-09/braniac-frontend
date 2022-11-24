@@ -1,4 +1,4 @@
-import { getGeoJson } from "../reducers/geoData";
+import { getGeoJson, setInfoPoint ,setInfoPending,setInfoSuccess} from "../reducers/geoData";
 
 export const fetchGeoJson = (location) => {
   return async (dispatch) => {
@@ -17,7 +17,18 @@ export const fetchGeoJson = (location) => {
     );
     console.log("res data from api:", res[0].geojson);
     console.log("res data after process:", crdArr);
-    dispatch(getGeoJson({geojson:crdArr}));
-
+    dispatch(getGeoJson({ geojson: crdArr }));
+  };
+};
+export const fetchAllReports = (lat = "", lon = "") => {
+  return async (dispatch) => {
+    dispatch(setInfoPending())
+    const response = await fetch(`https://uia-backend.onrender.com/report`);
+    if (!response.ok) {
+      console.log("An error occured while fetching poylgon ");
+    }
+    const res = await response.json();
+    console.log("report data",res)
+    dispatch(setInfoPoint({ data: res }));
   };
 };
