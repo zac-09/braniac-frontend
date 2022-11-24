@@ -7,7 +7,7 @@ import Button from "../Button/Button";
 const Navbar = ({ background }) => {
   return (
     <nav className={`${classes.navbar} ${background}`}>
-    <img src={logo} alt="logo" className={classes.logo} />
+      <img src={logo} alt="Braniac logo" className={classes.logo} />
       <div className={classes.nav_links}>
         <Link to="/" className={classes.link}>
           Home
@@ -15,14 +15,14 @@ const Navbar = ({ background }) => {
         <Link to="/aboutUs" className={classes.link}>
           About us
         </Link>
-        <Link to="/whyUs" className={classes.link}>
-          Why us
-        </Link>
-        <Link to="/howToUse" className={classes.link}>
+        <a className={classes.link} href="#whyUs">
+          Why Us
+        </a>
+        <a className={classes.link} href="#howtoUse">
           How To Use
-        </Link>
+        </a>
       </div>
-      {/* <Button /> */}
+      <Button />
     </nav>
   );
 };
