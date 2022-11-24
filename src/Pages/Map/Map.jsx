@@ -21,7 +21,7 @@ import CardContent from "@mui/joy/CardContent";
 import CardOverflow from "@mui/joy/CardOverflow";
 import Divider from "@mui/joy/Divider";
 import Typography from "@mui/joy/Typography";
-import AspectRatio from '@mui/joy/AspectRatio';
+import AspectRatio from "@mui/joy/AspectRatio";
 const libraries = ["places"];
 var options = {
   enableHighAccuracy: true,
@@ -83,37 +83,62 @@ const MapPage = () => {
     libraries,
   });
   const geoData = useSelector((state) => state.geo.geojson);
-  const infoData = useSelector((state) => state.geo.infoPoints);
+  let infoData = useSelector((state) => state.geo.infoPoints);
   const isLoading = useSelector((state) => state.geo.isLoading);
   const dispatch = useDispatch();
   const [userlat, setUserLat] = useState(41.28);
   const [userlon, setUserLon] = useState(0.1956);
   const [testState, setTestState] = useState("zac");
   const [autocomplete, setAutocomplete] = useState(null);
-  // const [isLoading, setIsLoading] = useState(false);
-  console.log("the geodata:", geoData);
-  console.log("the infodata:", infoData);
-  const [polygon, setPolygon] = useState([])
+
+  const [sewage, setSewage] = useState(false);
+  const [drinkingWater, setDrinkingWater] = useState(false);
+  const [groundWater, setGroundWater] = useState(false);
+  const [waterContamination, setwWterContamination] = useState(false);
+  const [drainageSystem, setDrainageSystem] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);\
+
+  infoData = infoData.filter((el) => {
+    if (!drinkingWater && el.type == "Drinking water".toLocaleLowerCase()) {
+      return false;
+    } else if (!sewage && el.type == "Sewage".toLocaleLowerCase()) {
+      return false;
+    } else if (!groundWater && el.type == "round Water".toLocaleLowerCase()) {
+      return false;
+    } else if (!waterContamination && el.type == "Water Contamination".toLocaleLowerCase()) {
+      return false;
+    } else if (!drainageSystem && el.type == "Drainage System".toLocaleLowerCase()) {
+      return false;
+    } else {
+     return  true;
+    }
+  });
+  console.log("state drinking water", drinkingWater);
+  console.log("state  sewage", sewage);
+  console.log("state groundWater", groundWater);
+  console.log("state waterContamination ", waterContamination);
+  console.log("state drainageSystem ", drainageSystem);
+
+  const [polygon, setPolygon] = useState([]);
 
   useEffect(() => {
-    console.log(geoData)
-    let list = []
-    if(geoData.type === 'Polygon'){
+    console.log(geoData);
+    let list = [];
+    if (geoData.type === "Polygon") {
       geoData.coordinates[0].forEach((item) => {
-        list.push({lat: item[1].toFixed(3), lng: item[0].toFixed(3)})
-      })
+        list.push({ lat: item[1].toFixed(3), lng: item[0].toFixed(3) });
+      });
     }
-    console.log(list)
-    setPolygon(list)
-  }, [geoData])
-  
-  
+    console.log(list);
+    setPolygon(list);
+  }, [geoData]);
+
   // Get bounds from geojson
   const bounds = useMemo(() => {
     if (geoData.type !== "Point" && geoData.coordinates) {
       console.log(geoData.coordinates);
-      let bounds = []
-      if(geoData.coordinates[0]){
+      let bounds = [];
+      if (geoData.coordinates[0]) {
         bounds = new window.google.maps.LatLngBounds();
         geoData.coordinates.forEach((feature) => {
           console.log(feature);
@@ -121,7 +146,7 @@ const MapPage = () => {
             bounds.extend(new window.google.maps.LatLng(coord[1], coord[0]));
           });
         });
-      }else{
+      } else {
         bounds.forEach((coord) => {
           bounds.extend(new window.google.maps.LatLng(coord[1], coord[0]));
         });
@@ -221,7 +246,7 @@ const MapPage = () => {
   const fetchDataHandler = async () => {
     try {
       // setIsLoading(true);
-      dispatch(fetchAllReports(userlat,userlon));
+      dispatch(fetchAllReports(userlat, userlon));
       // setIsLoading(false);
     } catch (e) {
       // setIsLoading(false);
@@ -229,7 +254,13 @@ const MapPage = () => {
   };
   if (!isLoaded)
     return (
-      <div style={{ display: "flex", justifyContent: "center",alignItems:"center" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         <CircularProgress variant="soft" />
       </div>
     );
@@ -438,31 +469,61 @@ const MapPage = () => {
         <div className={classes.map_content}>
           <h4>contents</h4>
           <div className={classes.checkboxes}>
-            <input type="checkbox" name="ward boundary" />
-            <label for="ward boundary">Ward Boundary</label>
+            <input
+              type="checkbox"
+              name="Sewage"
+              onChange={() => {
+                setSewage((prevState) => !prevState);
+              }}
+            />
+            <label for="Sewage"> Sewage</label>
           </div>
           <div className={classes.checkboxes}>
-            <input type="checkbox" name="city boundary" />
-            <label for="city boundary">City Boundary</label>
+            <input
+              type="checkbox"
+              name="Drinking water"
+              onChange={() => {
+                setDrinkingWater((prevState) => !prevState);
+              }}
+            />
+            <label for="Drinking water">Drinking water</label>
           </div>
           <div className={classes.checkboxes}>
-            <input type="checkbox" name="land use" />
-            <label for="land use">Land Use</label>
+            <input
+              type="checkbox"
+              name="Ground Water"
+              onChange={() => {
+                setGroundWater((prevState) => !prevState);
+              }}
+            />
+            <label for="lGround Water">Ground Water</label>
           </div>
           <div className={classes.checkboxes}>
-            <input type="checkbox" name=" settlements" />
-            <label for="settlements ">Settlements</label>
+            <input
+              type="checkbox"
+              name="Water Contamination"
+              onChange={() => {
+                setwWterContamination((prevState) => !prevState);
+              }}
+            />
+            <label for="Water Contamination ">Water Contamination</label>
           </div>
           <div className={classes.checkboxes}>
-            <input type="checkbox" name="population" />
-            <label for="population">Population</label>
+            <input
+              type="checkbox"
+              name="Drainage System"
+              onChange={() => {
+                setDrainageSystem((prevState) => !prevState);
+              }}
+            />
+            <label for="Drainage System">Drainage System</label>
           </div>
-          <div className={classes.checkboxes}>
-            <input type="checkbox" name="sanitation inversion" />
-            <label for="sanitation inversion">Sanitation Inversion</label>
-          </div>
+
           {isLoading ? (
-           <div style={{marginLeft:"35px"}}> <LoadingSpinner /> </div>
+            <div style={{ marginLeft: "35px" }}>
+              {" "}
+              <LoadingSpinner />{" "}
+            </div>
           ) : (
             <button className={classes.button} onClick={fetchDataHandler}>
               load Data
